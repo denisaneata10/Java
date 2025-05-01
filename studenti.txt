@@ -1,0 +1,13 @@
+Andrei,Matematica,5
+Ana,Romana,6
+Dan,Matematica,10
+Ana,Romana,10
+Dan,Istorie,10
+Andrei,POO,5
+Marius,SDD,3
+Liviu,SDD,2
+Ion,POO,6
+Vasile,Matematica,7
+George,Romana,6
+Vlad,Geografie,7
+Ciobanu,Engleza,8
