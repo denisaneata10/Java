@@ -95,6 +95,7 @@ public class Vehicul {
                 nrPasageriRest+= v.getNrPasageri();
 
         }
+        
         System.out.printf("Vehicule de lux: %d pasageri%n", nrPasageriVdeLux);
         System.out.printf("Alte vehicule: %d pasageri", nrPasageriRest);
     }
