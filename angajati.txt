@@ -1,0 +1,6 @@
+Ion;Contabilitate;3500
+Maria;Marketing;4000
+Alexandru;IT;7000
+Georgiana;Marketing;4500
+Irina;IT;7500
+Cristian;Resurse Umane;3000
