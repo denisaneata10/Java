@@ -49,6 +49,7 @@ final class Student {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+       
        int nrStudenti=studenti.size();
        System.out.println("Numarul de studenti este: "+nrStudenti);
 
