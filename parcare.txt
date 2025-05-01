@@ -1,0 +1,6 @@
+B-123-XYZ,Dacia,4
+SV-23-SJS,Volkswagen,8
+IF-789-ABC,Mercedes,5
+BZ-10-UIS,Ford,3
+TM-11-GLE,Audi,1
+B-22-UAD,Toyota,1
