@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Apartament {
- private final int nrAp;
- private final int suprafata;
- private final int nrPers;
+private final int nrAp;
+private final int suprafata;
+private final int nrPers;
+private static final int supCamera=20;
 
     public Apartament(int nrAp, int suprafata, int nrPers) {
         this.nrAp = nrAp;
         this.suprafata = suprafata;
         this.nrPers = nrPers;
+
     }
 
     public int getNrAp() {
@@ -28,6 +30,10 @@ public final class Apartament {
         return nrPers;
     }
 
+    public int getNumarCamere(){
+        return suprafata/supCamera;
+    }
+
     @Override
     public String toString() {
         return "Apartament{" +
@@ -37,30 +43,83 @@ public final class Apartament {
                 '}';
     }
 
-    public static List<Apartament> citireDinFisier(String numeFisier){
+    public static List<Apartament> citesteDinFisier(String numeFisier){
         List<Apartament>apartamente=new ArrayList<>();
-        try(BufferedReader fisier=new BufferedReader(new FileReader("imobil.txt"))) {
+        try(BufferedReader fisier=new BufferedReader(new FileReader("C:\\Users\\Denisa\\IdeaProjects\\ExercitiiTest1\\src\\imobil.txt"))) {
             String linie;
             while((linie=fisier.readLine())!=null){
-                String data[]=linie.split(",");
-                int nrAp=Integer.parseInt(data[0]);
-                int sup=Integer.parseInt(data[1]);
-                int nrPers=Integer.parseInt(data[2]);
-                
+                String date[]=linie.split(",");
+                int nrAp=Integer.parseInt(date[0]);
+                int sup=Integer.parseInt(date[1]);
+                int nrPers=Integer.parseInt(date[2]);
+
                 Apartament a=new Apartament(nrAp,sup,nrPers);
-                
+
                 apartamente.add(a);
-                
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        } ;
         return apartamente;
     }
+
+
+//urmatoarele 2 funtii sunt in plus, am inteles eu gresit cerinta
+    public static int SuprafataTotala(List<Apartament> apartamente){
+        int SupTot=0;
+        for(Apartament ap:apartamente){
+            SupTot+=ap.getSuprafata();
+        }
+        return SupTot;
+    }
+
+    public static int NrTotPers(List<Apartament> apartamente){
+        int nrPersTot=0;
+        for(Apartament ap:apartamente){
+            nrPersTot+=ap.getNrPers();
+        }
+        return nrPersTot;
+    }
+
+    //cerinta 3: nr total de persoane pe fiecare tip de apartament
+    public static void nrtotPersPeFiecareTipAp(List<Apartament>apartamente){
+        for(Apartament ap:apartamente){
+            int nrCamere=ap.getNumarCamere();
+            int nrPersAp=0;
+            while(ap.getNumarCamere()==4){
+               nrPersAp+=ap.getNrPers();
+            }
+            while(ap.getNumarCamere()==3){
+                nrPersAp+=ap.getNrPers();
+            }
+            while(ap.getNumarCamere()==2){
+                nrPersAp+=ap.getNrPers();
+            }
+        }
+    }
+    
+
     public static void main(String[] args){
+        //cream o lista in care citim fisierul
+        List<Apartament>apartamente=citesteDinFisier("C:\\Users\\Denisa\\IdeaProjects\\ExercitiiTest1\\src\\imobil.txt");
+        //afisam
+        for(Apartament ap:apartamente){
+            System.out.println("Suprafata: "+ap.getSuprafata()+", Numarul de persoane: "+ap.getNrPers());
+        }
+
+        int nr=apartamente.size();
+        System.out.println(nr+" apartamente");
+        //testam metoda de getNrcamere
+        int a1= apartamente.get(0).getNumarCamere();
+        System.out.println("Primul apartament are "+a1+" camere");
+
+        //functii in plus
+        int suprafataTotala=SuprafataTotala(apartamente);
+        int numarDePersoane=NrTotPers(apartamente);
+        System.out.println("Suprafata totala este "+suprafataTotala+", iar numarul total de persoane este "+ numarDePersoane);
+
 
     }
 }
-
