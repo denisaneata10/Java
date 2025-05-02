@@ -1,0 +1,7 @@
+Maria Butoi	Cota_0012	6
+Maria Butoi	Cota_0015	9
+Maria Butoi	Cota_0014	4
+Andrei Spataru	Cota_0011	5
+Andrei Spataru	Cota_0013	3
+Elena Lupu	Cota_0014	2
+Elena Lupu	Cota_0012	7

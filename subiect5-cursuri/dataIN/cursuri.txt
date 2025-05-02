@@ -1,0 +1,8 @@
+Ion;Java pentru începători;85
+Maria;Introducere in Phyton;92
+Alexandru;Java pentru incepatori;76
+Georgiana;Design grafic;89
+Andrei;Design grafic;77
+Ioana;Design grafic;90
+Elena;Introducere in Phyton;95
+Cristian;Securitate cibernetică;88

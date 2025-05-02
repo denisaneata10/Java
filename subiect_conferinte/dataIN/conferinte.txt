@@ -1,0 +1,5 @@
+1	"SmartTech 2025"	"București"	"Ioana Ionescu"
+2	"AI in Healthcare"	"Cluj-Napoca"	"Mihai Popa"
+3	"Quantum Computing"	"Timișoara"	"Andrei Vlad"
+4	"Future of Robotics"	"Iași"	"Elena Vasile"
+5	"Cybersecurity Summit"	"București"	"Alexandru Popescu"
