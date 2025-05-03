@@ -3,7 +3,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class Apartament {
 private final int nrAp;
@@ -85,18 +87,17 @@ private static final int supCamera=20;
 
     //cerinta 3: nr total de persoane pe fiecare tip de apartament
     public static void nrtotPersPeFiecareTipAp(List<Apartament>apartamente){
-        for(Apartament ap:apartamente){
-            int nrCamere=ap.getNumarCamere();
-            int nrPersAp=0;
-            while(ap.getNumarCamere()==4){
-               nrPersAp+=ap.getNrPers();
-            }
-            while(ap.getNumarCamere()==3){
-                nrPersAp+=ap.getNrPers();
-            }
-            while(ap.getNumarCamere()==2){
-                nrPersAp+=ap.getNrPers();
-            }
+        Map<Integer,Integer>persoanePerTip=new HashMap<>();
+
+        for(Apartament a:apartamente){
+            int nrCamere=a.getNumarCamere();
+            int nrPers=a.getNrPers();
+            persoanePerTip.put(nrCamere,persoanePerTip.getOrDefault(nrCamere,0)+a.getNrPers());
+        }
+        for(Map.Entry<Integer,Integer> entry:persoanePerTip.entrySet() ){
+            int nrCamere= entry.getKey();
+            int nrPersoane= entry.getValue();
+            System.out.println(nrCamere+" camere: "+nrPersoane+" persoane");
         }
     }
     
@@ -120,6 +121,8 @@ private static final int supCamera=20;
         int numarDePersoane=NrTotPers(apartamente);
         System.out.println("Suprafata totala este "+suprafataTotala+", iar numarul total de persoane este "+ numarDePersoane);
 
+        Apartament.nrtotPersPeFiecareTipAp(apartamente);
 
     }
 }
+
