@@ -1,16 +1,14 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
+
 //1. cream clasa
-public final class Angajat {
+public final class Angajat1 {
     private final String numeAngajat;
     private final String denumireDepartament;
     private final int salariu;
 
-    public Angajat(String numeAngajat, String denumireDepartament, int salariu) {
+    public Angajat1(String numeAngajat, String denumireDepartament, int salariu) {
         this.numeAngajat = numeAngajat;
         this.denumireDepartament = denumireDepartament;
         this.salariu = salariu;
@@ -30,51 +28,82 @@ public final class Angajat {
 
     @Override
     public String toString() {
-        return "Angajati{" +
+        return "Angajat1{" +
                 "numeAngajat='" + numeAngajat + '\'' +
                 ", denumireDepartament='" + denumireDepartament + '\'' +
                 ", salariu=" + salariu +
                 '}';
     }
-//2. citire din fisier+ metoda care sa calculeze nr total de angajati
-    public static List<Angajat> citireDinFisier(String numeFisier){
-        List<Angajat>angajati=new ArrayList<>();
-        try(BufferedReader fisierAngajati=new BufferedReader(new FileReader("C:\\Users\\Denisa\\IdeaProjects\\ExercitiiTest1\\fisiere\\angajati.txt"))) {
+//citire din fisier
+    public static List<Angajat1> citesteDinFisier(String numeFisier){
+        List<Angajat1>angajati=new ArrayList<>();
+        try(BufferedReader fisier=new BufferedReader(new FileReader("./fisiere./angajati.txt"))){
             String linie;
-            while((linie=fisierAngajati.readLine())!=null){
-                String date[]=linie.split(";");
-                String nume=date[0];
-                String denumire=date[1];
-                int salariu=Integer.parseInt(date[2]);
+            while((linie=fisier.readLine())!=null){
+                String[] ceva=linie.split(";");
+                String nume=ceva[0];
+                String denumire=ceva[1];
+                int salariu=Integer.parseInt(ceva[2]);
 
-                Angajat a=new Angajat(nume, denumire,salariu);
+                Angajat1 a=new Angajat1(nume,denumire,salariu);
 
                 angajati.add(a);
+
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } ;
-
+        }
         return angajati;
     }
-
-    public static int nrTotalAngajati(List<Angajat> angajati){
-        int nrTotAng=0;
-        nrTotAng=angajati.size();
-        return nrTotAng;
-   }
-
-   
-
+//2.sa se afiseze la consola nr tot de angajati
+    public static int nrTotAng(List<Angajat1>angajati){
+        return angajati.size();
+    }
+//3.pt un dep introdus de la consola, sa se afiseze lista de angajati sortata descrescator
+    public static void angaatiDescrescator(List<Angajat1> angajati, String departament){
+        angajati.stream()
+                .filter(a->a.getDenumireDepartament().equalsIgnoreCase(departament))
+                .sorted((a1,a2)->Integer.compare(a2.getSalariu(),a1.getSalariu()))
+                .forEach(System.out::println);
+    }
+//am impartit cerinta 4 in 2 functii, aici am calculat mediile salariilor pe fiecare departament
+    public static Map<String,Double> salariiPeDepartament(List<Angajat1> angajati){
+        return angajati.stream()
+                .collect(Collectors.groupingBy(
+                        Angajat1::getDenumireDepartament
+                        ,Collectors.averagingInt(Angajat1::getSalariu)));
+    }
+//aici am scris intr-un fisier text
+    public static void scrieInFisier(Map<String,Double> mediiSalPeDep){
+        try(BufferedWriter raport=new BufferedWriter(new FileWriter("departamente.txt"))) {
+            for(Map.Entry<String,Double> entry: mediiSalPeDep.entrySet()){
+                raport.write(entry.getKey()+"->"+String.format("%.2f",entry.getValue()));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Raport generat");
+    }
+    //main-ul unde am apelat toate funtiile
     public static void main(String[] args){
-      List<Angajat>angajati=citireDinFisier("angajati.txt");
-       angajati.forEach(System.out::println);
-       int nrTotalAng=nrTotalAngajati(angajati);
-        System.out.println(nrTotalAng);
+        List<Angajat1>angajati=citesteDinFisier(".\fisiere.angajati.txt");
+        for(Angajat1 a:angajati){
+            System.out.println(a);
+        }
+        int TotalAngajati=nrTotAng(angajati);
+        System.out.println(TotalAngajati+" angajati");
+
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("introduceti denumire departamentului: ");
+        String departament=scanner.nextLine();
+        Angajat1.angaatiDescrescator(angajati, departament);
+
+        Map<String, Double> raport=Angajat1.salariiPeDepartament(angajati);
+        Angajat1.scrieInFisier(raport);
 
 
     }
-
 }
+
