@@ -1,33 +1,21 @@
-import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public class Vehicul {
-    private final String nrInmatriculare;
+import java.io.*;
+import java.util.*;
+//facem clasa
+public final class Vehicul{
+    private final String nrImatriculare;
     private final String marca;
     private final int nrPasageri;
 
-    private static final List<String>deLux= Arrays.asList("Mercedes", "Audi", "BMW");
-
-    public Vehicul() {
-        this.nrInmatriculare=" ";
-        this.marca=" ";
-        this.nrPasageri=0;
-    }
-
-    public Vehicul(String nrInmatriculare, String marca, int nrPasageri) {
-        this.nrInmatriculare = nrInmatriculare;
+    public Vehicul(String nrImatriculare, String marca, int nrPasageri) {
+        this.nrImatriculare = nrImatriculare;
         this.marca = marca;
         this.nrPasageri = nrPasageri;
     }
+//definim lista cu vehicule de lux
+    private static final List<String> vehiculeDeLux=Arrays.asList("Mercedes","BMW","Audi");
 
-    public String getNrInmatriculare() {
-        return nrInmatriculare;
+    public String getNrImatriculare() {
+        return nrImatriculare;
     }
 
     public String getMarca() {
@@ -38,65 +26,119 @@ public class Vehicul {
         return nrPasageri;
     }
 
-    public boolean esteDeLux(){
-        return deLux.contains(this.marca);
-    }
-
     @Override
     public String toString() {
         return "Vehicul{" +
-                "nrInmatriculare='" + nrInmatriculare + '\'' +
+                "nrImatriculare='" + nrImatriculare + '\'' +
                 ", marca='" + marca + '\'' +
                 ", nrPasageri=" + nrPasageri +
                 '}';
     }
+//metoda esteDeLux
+    public boolean esteDeLux(){
+       return vehiculeDeLux.contains(this.marca);
 
-    public static void main(String[] args){
-//        Vehicul v1=new Vehicul("TR-11-MDI","Opel",4);
-//        System.out.println(v1.esteDeLux());
+    }
+//calculam nr total de vehicule
+    public static int nrTotVehicule(List<Vehicul> vehicule){
+        return vehicule.size();
+    }
+//calculam nr tot de pasageri
+    public static int nrTotPasageri(List<Vehicul> vehicule){
+        int totPasageri=0;
+        for(Vehicul v:vehicule){
+            totPasageri+=v.getNrPasageri();
+        }
+        return totPasageri;
+    }
+//calculam numarul de pasageri pt vehiculele de lux
+    public static int nrPasageriDeLux(List<Vehicul> vehicule){
+        int pasageriDeLux=0;
+        for(Vehicul v:vehicule){
+            if(v.esteDeLux()){
+                pasageriDeLux+=v.getNrPasageri();
+            }
+        }
+        return pasageriDeLux;
+    }
+//calculam nr de pasageri pt celelalte vehicule
+    public static int PasagerialteVehicule(List<Vehicul> vehicule){
+        int rest=0;
+        for(Vehicul v:vehicule){
+            if(!v.esteDeLux()){
+                rest+=v.getNrPasageri();
+            }
+        }
+        return rest;
+    }
+//citire din fisier
+    public static List<Vehicul>citesteDinFisier(String numeFisier){
         List<Vehicul> vehicule=new ArrayList<>();
+        try(BufferedReader fisier=new BufferedReader(new FileReader("C:\\Users\\Denisa\\IdeaProjects\\ExercitiiTest1\\src\\parcare.txt"))) {
+            String linie;
+            while((linie=fisier.readLine())!=null){
+                String date[]=linie.split(",");
+                String nr=date[0];
+                String marca=date[1];
+                int nrPasageri=Integer.parseInt(date[2]);
 
-        try(var fisierParcare= new BufferedReader(new FileReader("C:\\Users\\Denisa\\IdeaProjects\\ExercitiiTest1\\src\\parcare.txt"))){
-        String linie;
-
-        while((linie=fisierParcare.readLine())!=null){
-
-         String date[]=linie.split(",");
-
-         String nrInmatriculare=date[0];
-         String marca=date[1];
-         int nrPasageri=Integer.parseInt(date[2]);
-
-         Vehicul v=new Vehicul(nrInmatriculare, marca, nrPasageri);
-         vehicule.add(v);
-
-        }
-            fisierParcare.close();
-        }
-
-        catch (FileNotFoundException e) {
+                Vehicul v=new Vehicul(nr, marca, nrPasageri);
+                vehicule.add(v);
+            }
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return vehicule;
+    }
+//taxa pe judete
+    public static Map<String, Double> calculeazaTaxePeJudete(List<Vehicul> vehicule, Double taxa){
+        Map<String, Double> taxe=new HashMap<>();
 
-        int nrVehicule=vehicule.size();
-        int nrTotalPasageri=0;
-        for( Vehicul v:vehicule)
-            nrTotalPasageri+=v.getNrPasageri();
+        for(Vehicul v:vehicule){
+            String judet=v.getNrImatriculare().split("-")[0];
 
-        System.out.printf("%d vehicule cu %d pasageri %n", nrVehicule, nrTotalPasageri);
-        int nrPasageriVdeLux=0;
-        int nrPasageriRest=0;
-        for(Vehicul v: vehicule){
-            if(v.esteDeLux())
-                nrPasageriVdeLux+= v.getNrPasageri();
-            else
-                nrPasageriRest+= v.getNrPasageri();
-
+            if(v.esteDeLux()){
+                 taxa=1.2*taxa;
+            }
+            taxe.put(judet, taxe.getOrDefault(judet,0.0)+taxa);
         }
-        
-        System.out.printf("Vehicule de lux: %d pasageri%n", nrPasageriVdeLux);
-        System.out.printf("Alte vehicule: %d pasageri", nrPasageriRest);
+        return taxe;
+    }
+//scriere in fisier
+    public static void scrieInFisier(Map<String, Double> taxePeJudet){
+        try(BufferedWriter raport=new BufferedWriter(new FileWriter("raportParcare.txt"))) {
+            for(Map.Entry<String, Double> entry : taxePeJudet.entrySet()){
+                raport.write(entry.getKey()+","+ String.format("%.2f",entry.getValue()));
+                raport.newLine();
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+//main
+    public static void main(String[] args){
+    List<Vehicul> vehicule=citesteDinFisier("parcare.txt");
+    for(Vehicul v:vehicule){
+        System.out.println(v);
+    }
+    boolean deLux=vehicule.get(0).esteDeLux();
+        System.out.println(deLux);
+
+        int totVehicule=Vehicul.nrTotVehicule(vehicule);
+        int totPasageri=Vehicul.nrTotPasageri(vehicule);
+        System.out.println(totVehicule+" vechicule si "+totPasageri+" pasageri");
+
+        int lux=Vehicul.nrPasageriDeLux(vehicule);
+        int rest=Vehicul.PasagerialteVehicule(vehicule);
+        System.out.println("Vehicule de lux: "+lux+" pasageri");
+        System.out.println("Alte vehicule: "+rest+" pasageri");
+
+       final double taxa=10;
+       Map<String, Double> taxe=Vehicul.calculeazaTaxePeJudete(vehicule, taxa);
+        System.out.println(taxe);
+        Vehicul.scrieInFisier(taxe);
     }
 }
