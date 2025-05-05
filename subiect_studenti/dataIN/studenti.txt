@@ -1,0 +1,10 @@
+Bianca,Java,10
+Denisa,Java,10
+Ana,Paw,6
+Ioana,Mate,9
+Andrei,Sport,7
+Adrian,Engleza,7
+Ionut,Engleza,6
+Ioana,Mate,9
+Andrei,Sport,7
+Ioana,Engleza,10

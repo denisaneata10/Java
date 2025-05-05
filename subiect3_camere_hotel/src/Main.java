@@ -113,8 +113,8 @@ public class Main {
 
     private static void TipuriDeCamere(Map<String, Camera> camere){
         Map<Integer, Long> tipuri = camere.values().stream()
-                .map(c-> c.getNrPaturi())
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+               // .map(c-> c.getNrPaturi())
+                .collect(Collectors.groupingBy(Camera::getNrPaturi, Collectors.counting()));
 
         tipuri.forEach((nrPaturi, count)->
                 System.out.println("Camere cu " + nrPaturi +" paturi : " + count));

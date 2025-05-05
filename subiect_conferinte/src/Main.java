@@ -228,7 +228,10 @@ public class Main {
 
 
     }
-
+    public static void LocatiiOrd2(List<Prezentare> prezentari){
+            Map<String, Long> nrprez = prezentari.stream()
+                    .collect(Collectors.groupingBy(Prezentare::getTitlu, Collectors.counting()));
+    }
 
     //prelucrare astfel incat sa ne afiseze orarul prezentarilor intr o anumita zi
 
